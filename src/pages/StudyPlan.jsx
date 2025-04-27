@@ -1,8 +1,11 @@
+// pages/StudyPlanPage.jsx
 import React, { useState, useEffect } from 'react';
 import { getDatabase, ref, push, onValue, remove } from 'firebase/database';
 import { auth } from '../firebase';
+import TaskInput from '../components/TaskInput';
+import TaskList from '../components/TaskList';
 
-function StudyPlan() {
+function StudyPlanPage() {
   const [tasks, setTasks] = useState([]);
   const [title, setTitle] = useState('');
   const [deadline, setDeadline] = useState('');
@@ -37,8 +40,7 @@ function StudyPlan() {
     // Check deadlines every minute
     const interval = setInterval(checkDeadlines, 60000);
     return () => clearInterval(interval);
-
-  }, []);
+  }, [tasks]);
 
   const handleAddTask = () => {
     if (title.trim() !== '' && deadline.trim() !== '') {
@@ -74,7 +76,7 @@ function StudyPlan() {
           if (Notification.permission === 'granted') {
             new Notification('⏰ Upcoming Deadline!', {
               body: `${task.title} is due soon!`,
-              icon: '/notification-icon.png', // Optional small bell icon
+              icon: '/notification-icon.png',
             });
           }
         }
@@ -90,69 +92,16 @@ function StudyPlan() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-100 to-indigo-300 p-8"
-    style={{ backgroundImage: `url('public/Todo.png')` }}>
-      <h1 className="text-4xl font-bold text-center mb-8 text-indigo-800">📚 Study Plan</h1>
+    <div className="min-h-screen bg-gradient-to-b from-indigo-100 to-indigo-300 p-8" style={{ backgroundImage: `url('public/Todo.png')` }}>
+      <h1 className="text-4xl font-bold text-center mb-8 text-indigo-800">STUDY PLANS</h1>
 
       {/* Input Section */}
-      <div className="max-w-xl mx-auto mb-8 bg-white p-6 rounded-lg shadow-lg space-y-4">
-        <input
-          type="text"
-          placeholder="Task Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-        />
-        <input
-          type="datetime-local"
-          value={deadline}
-          onChange={(e) => setDeadline(e.target.value)}
-          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-        />
-        <button
-          onClick={handleAddTask}
-          className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition duration-300 font-semibold"
-        >
-          ➕ Add Task
-        </button>
-      </div>
+      <TaskInput title={title} setTitle={setTitle} deadline={deadline} setDeadline={setDeadline} handleAddTask={handleAddTask} />
 
       {/* Tasks List */}
-      <div className="max-w-4xl mx-auto grid gap-6 grid-cols-1 md:grid-cols-2">
-        {tasks.length > 0 ? (
-          tasks.map((task) => (
-            <div
-              key={task.id}
-              className={`relative bg-white p-6 rounded-lg shadow-md transition ${
-                isDeadlineClose(task.deadline) ? 'border-2 border-red-400' : ''
-              }`}
-            >
-              <h2 className="text-2xl font-semibold mb-2">{task.title}</h2>
-              <p className="text-gray-600 mb-4">
-                🕒 {new Date(task.deadline).toLocaleString()}
-              </p>
-
-              {/* Highlight if deadline is close */}
-              {isDeadlineClose(task.deadline) && (
-                <span className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full animate-pulse">
-                  Soon!
-                </span>
-              )}
-
-              <button
-                onClick={() => handleDeleteTask(task.id)}
-                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md mt-4"
-              >
-                Delete
-              </button>
-            </div>
-          ))
-        ) : (
-          <p className="text-center text-gray-700 col-span-2 text-lg font-semibold">No tasks yet. Add one! ✍️</p>
-        )}
-      </div>
+      <TaskList tasks={tasks} handleDeleteTask={handleDeleteTask} isDeadlineClose={isDeadlineClose} />
     </div>
   );
 }
 
-export default StudyPlan;
+export default StudyPlanPage;

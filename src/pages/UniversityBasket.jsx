@@ -1,8 +1,11 @@
+// pages/UniversityBasketPage.jsx
 import React, { useState, useEffect } from 'react';
 import { getDatabase, ref, onValue, remove } from 'firebase/database';
 import { auth } from '../firebase';
+import UniversityCard from '../components/UniversityCard';
+import ErrorMessage from '../components/ErrorMessage';
 
-function UniversityBasket() {
+function UniversityBasketPage() {
   const [savedUniversities, setSavedUniversities] = useState([]);
   const [error, setError] = useState(null);
 
@@ -45,30 +48,17 @@ function UniversityBasket() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-8"
-    style={{ backgroundImage: `url('public/images.jpeg')` }}>
+      style={{ backgroundImage: `url('public/images.jpeg')` }}>
       <h1 className="text-3xl font-bold text-center mb-6">UNIVERSITY BASKET</h1>
 
       {/* Display Error Message if there's an error */}
-      {error && <p className="text-red-500 text-center">{error}</p>}
+      {error && <ErrorMessage message={error} />}
 
       {/* Display Saved Universities */}
       <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {savedUniversities.length > 0 ? (
           savedUniversities.map((university) => (
-            <div key={university.id} className="bg-white p-4 shadow-lg rounded-lg">
-              <h2 className="text-xl font-bold">{university.name}</h2>
-              <p><strong>Country:</strong> {university.country}</p>
-              <p><strong>Website:</strong> <a href={university.web_pages[0]} target="_blank" rel="noopener noreferrer" className="text-blue-500">{university.web_pages[0]}</a></p>
-              <p><strong>Domains:</strong> {university.domains.join(', ')}</p>
-
-              {/* Delete Button */}
-              <button
-                onClick={() => deleteUniversity(university.id)}
-                className="mt-4 bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600"
-              >
-                Delete
-              </button>
-            </div>
+            <UniversityCard key={university.id} university={university} onDelete={deleteUniversity} />
           ))
         ) : (
           <p className="text-center">Your basket is empty.</p>
@@ -78,4 +68,4 @@ function UniversityBasket() {
   );
 }
 
-export default UniversityBasket;
+export default UniversityBasketPage;
