@@ -1,18 +1,25 @@
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore"; // or use Realtime Database
+import { initializeApp } from 'firebase/app';
+import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDSPj8LzBe2em10Yc1IUssqpgv_MDBFT7A",
-    authDomain: "scholalyst.firebaseapp.com",
-    projectId: "scholalyst",
-    storageBucket: "scholalyst.firebasestorage.app",
-    messagingSenderId: "482779555408",
-    appId: "1:482779555408:web:f8940a5a91670ad9095355",
-    measurementId: "G-1SJ2KWKQP9"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
+
 
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
+export const provider = new GoogleAuthProvider();
 export const db = getFirestore(app);
+
+export const googleSignIn = () => signInWithPopup(auth, provider);
+export const emailSignUp = (email, password) => createUserWithEmailAndPassword(auth, email, password);
+export const emailSignIn = (email, password) => signInWithEmailAndPassword(auth, email, password);
+export const logOut = () => signOut(auth);
