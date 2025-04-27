@@ -48,7 +48,7 @@ function UniversityBasketPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-8"
-      style={{ backgroundImage: `url('public/images.jpeg')` }}>
+      style={{ backgroundImage: `url('/images.jpeg')` }}>
       <h1 className="text-3xl font-bold text-center mb-6">UNIVERSITY BASKET</h1>
 
       {/* Display Error Message if there's an error */}

@@ -72,7 +72,7 @@ function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8" style={{ backgroundImage: `url('public/background.png')` }}>
+    <div className="min-h-screen bg-gray-100 p-8" style={{ backgroundImage: `url('background.png')` }}>
       <h1 className="text-4xl font-bold text-center mb-8 text-white">WELCOME TO THE UNIVERSITY PORTAL</h1>
 
       {/* Search Bar Component */}

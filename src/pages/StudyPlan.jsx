@@ -92,7 +92,7 @@ function StudyPlanPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-100 to-indigo-300 p-8" style={{ backgroundImage: `url('public/Todo.png')` }}>
+    <div className="min-h-screen bg-gradient-to-b from-indigo-100 to-indigo-300 p-8" style={{ backgroundImage: `url('/Todo.png')` }}>
       <h1 className="text-4xl font-bold text-center mb-8 text-indigo-800">STUDY PLANS</h1>
 
       {/* Input Section */}
