@@ -1,6 +1,12 @@
+// pages/Login.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { googleSignIn, emailSignUp, emailSignIn } from '../firebase';
+import FormHeader from '../components/FormHeader';
+import FormInput from '../components/FormInput';
+import FormButton from '../components/FormButton';
+import ToggleSwitch from '../components/ToggleSwitch';
+import ErrorMessage from '../components/ErrorMessage';
 
 function Login() {
   const navigate = useNavigate();
@@ -52,78 +58,68 @@ function Login() {
       style={{ backgroundImage: "url('/background.png')" }} // Ensure image is accessible in public folder
     >
       <div className="p-8 bg-white bg-opacity-80 shadow-lg rounded-lg max-w-md w-full">
-        <h2 className="text-2xl font-bold mb-4 text-center">{isSignUp ? 'Sign Up' : 'Sign In'}</h2>
+        {/* Form Header */}
+        <FormHeader isSignUp={isSignUp} />
 
-        {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
+        {/* Error Message */}
+        {error && <ErrorMessage message={error} />}
 
         {/* Name input for sign-up */}
         {isSignUp && (
-          <div className="mb-4">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
-            <input 
-              type="text" 
-              id="name" 
-              className="mt-1 block w-full p-2 border rounded-md"
-              value={name}
-              onChange={(e) => setName(e.target.value)} 
-              required 
-              placeholder="Enter your full name"
-            />
-          </div>
+          <FormInput
+            id="name"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Enter your full name"
+            label="Full Name"
+            required
+          />
         )}
 
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-          <input 
-            type="email" 
-            id="email" 
-            className="mt-1 block w-full p-2 border rounded-md"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)} 
-            required 
-            placeholder="Enter your email"
-          />
-        </div>
+        <FormInput
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter your email"
+          label="Email"
+          required
+        />
 
-        <div className="mb-4">
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
-          <input 
-            type="password" 
-            id="password" 
-            className="mt-1 block w-full p-2 border rounded-md"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)} 
-            required
-            placeholder="Enter your password"
-          />
-        </div>
+        <FormInput
+          id="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Enter your password"
+          label="Password"
+          required
+        />
 
-        <button 
-          className={`w-full ${loading ? 'bg-gray-400' : 'bg-blue-500'} text-white py-2 rounded-md hover:bg-blue-600`}
-          onClick={handleEmailLogin}
+        {/* Form Button */}
+        <FormButton 
+          loading={loading} 
+          onClick={handleEmailLogin} 
+          text={isSignUp ? 'Sign Up' : 'Sign In'} 
           disabled={loading}
-        >
-          {loading ? 'Loading...' : isSignUp ? 'Sign Up' : 'Sign In'}
-        </button>
+        />
 
+        {/* Google Login Button */}
         <div className="mt-4 text-center">
-          <button 
-            className={`w-full ${loading ? 'bg-gray-400' : 'bg-red-500'} text-white py-2 rounded-md hover:bg-red-600`}
-            onClick={handleGoogleLogin}
+          <FormButton 
+            loading={loading} 
+            onClick={handleGoogleLogin} 
+            text="Sign In with Google" 
             disabled={loading}
-          >
-            {loading ? 'Loading...' : 'Sign In with Google'}
-          </button>
+          />
         </div>
 
-        <div className="mt-4 text-center">
-          <button 
-            className="text-sm text-blue-500 hover:underline" 
-            onClick={() => setIsSignUp(!isSignUp)} // Toggle between Sign Up and Sign In
-          >
-            {isSignUp ? 'Already have an account? Sign In' : 'Don’t have an account? Sign Up'}
-          </button>
-        </div>
+        {/* Toggle Sign Up/Sign In */}
+        <ToggleSwitch 
+          isSignUp={isSignUp} 
+          onToggle={() => setIsSignUp(!isSignUp)} 
+        />
       </div>
     </div>
   );
