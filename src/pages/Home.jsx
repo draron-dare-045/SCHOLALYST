@@ -1,24 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signOut } from 'firebase/auth';
-import { auth, db } from '../firebase'; // Import Firebase auth and database instance
-import { getDatabase, ref, set, push } from 'firebase/database'; // Firebase Realtime Database methods
-import axios from 'axios'; // For fetching the university data
+import { auth, db } from '../firebase';
+import { getDatabase, ref, push } from 'firebase/database';
+import axios from 'axios';
+import SearchBar from '../components/SearchBar';
+import CountryFilter from '../components/CountryFilter';
+import UniversityList from '../components/UniversityList'; // New component for listing universities
+import ErrorMessage from '../components/ErrorMessage';
 
 function Home() {
   const navigate = useNavigate();
   const [universities, setUniversities] = useState([]);
+  const [filteredUniversities, setFilteredUniversities] = useState([]);
   const [error, setError] = useState(null);
-
-  // Handle logout
-  const handleLogout = async () => {
-    try {
-      await signOut(auth); // Firebase sign out method
-      navigate('/login'); // Redirect to the login page after logging out
-    } catch (error) {
-      console.error("Error signing out: ", error.message);
-    }
-  };
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState('');
 
   // Handle saving university to the user's basket
   const handleSaveUniversity = (university) => {
@@ -41,9 +37,10 @@ function Home() {
 
   // Fetch universities data when the component mounts
   useEffect(() => {
-    axios.get('https://backend-scholalyst.onrender.com/universities') // Use your backend URL here
+    axios.get('https://backend-scholalyst.onrender.com/universities')
       .then(response => {
-        setUniversities(response.data); // Set universities data in state
+        setUniversities(response.data);
+        setFilteredUniversities(response.data); // Set the universities to display
       })
       .catch(err => {
         console.error('Error fetching universities:', err);
@@ -51,44 +48,47 @@ function Home() {
       });
   }, []);
 
+  // Handle search functionality
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+    const searchLower = e.target.value.toLowerCase();
+    const filtered = universities.filter(university =>
+      university.name.toLowerCase().includes(searchLower)
+    );
+    setFilteredUniversities(filtered);
+  };
+
+  // Handle filter functionality by country
+  const handleCountryFilter = (e) => {
+    setSelectedCountry(e.target.value);
+    if (e.target.value === '') {
+      setFilteredUniversities(universities);
+    } else {
+      const filtered = universities.filter(university =>
+        university.country === e.target.value
+      );
+      setFilteredUniversities(filtered);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <h1 className="text-3xl font-bold text-center mb-6">Welcome to the University Portal</h1>
+    <div className="min-h-screen bg-gray-100 p-8" style={{ backgroundImage: `url('public/background.png')` }}>
+      <h1 className="text-4xl font-bold text-center mb-8 text-white">WELCOME TO THE UNIVERSITY PORTAL</h1>
 
-      {/* Logout Button */}
-      <div className="text-center mb-6">
-        <button
-          onClick={handleLogout}
-          className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-lg text-lg transition duration-300"
-        >
-          Logout
-        </button>
-      </div>
+      {/* Search Bar Component */}
+      <SearchBar searchQuery={searchQuery} handleSearch={handleSearch} />
 
-      {/* Display Error Message if there's an error */}
-      {error && <p className="text-red-500 text-center">{error}</p>}
+      {/* Country Filter Component */}
+      <CountryFilter selectedCountry={selectedCountry} handleCountryFilter={handleCountryFilter} />
 
-      {/* Display Universities */}
-      <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {universities.length > 0 ? (
-          universities.map((university, index) => (
-            <div key={index} className="bg-white p-4 shadow-lg rounded-lg">
-              <h2 className="text-xl font-bold">{university.name}</h2>
-              <p><strong>Country:</strong> {university.country}</p>
-              <p><strong>Website:</strong> <a href={university.web_pages[0]} target="_blank" rel="noopener noreferrer" className="text-blue-500">{university.web_pages[0]}</a></p>
-              <p><strong>Domains:</strong> {university.domains.join(', ')}</p>
-              <button
-                onClick={() => handleSaveUniversity(university)}
-                className="mt-4 w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600"
-              >
-                Save to Basket
-              </button>
-            </div>
-          ))
-        ) : (
-          <p className="text-center">No universities found.</p>
-        )}
-      </div>
+      {/* Error Message */}
+      {error && <ErrorMessage message={error} />}
+
+      {/* University List Component */}
+      <UniversityList 
+        filteredUniversities={filteredUniversities} 
+        handleSaveUniversity={handleSaveUniversity} 
+      />
     </div>
   );
 }
