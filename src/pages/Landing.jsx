@@ -4,13 +4,13 @@ function Landing() {
   const navigate = useNavigate();
 
   const handleGetStarted = () => {
-    navigate('/login');
+    navigate('/login'); // Redirect to the Login page
   };
 
   return (
     <div
       className="relative w-full h-screen bg-cover bg-center"
-      style={{ backgroundImage: `url('public/background.png')` }} 
+      style={{ backgroundImage: `url('public/background.png')` }}
     >
       <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center text-white text-center px-4">
         <h1 className="text-4xl md:text-6xl font-bold mb-4">Unlock Your Academic Journey</h1>

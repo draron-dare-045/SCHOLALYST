@@ -9,29 +9,31 @@ function Login() {
   const [isSignUp, setIsSignUp] = useState(true);
   const [error, setError] = useState('');
 
+  // Google login handler
   const handleGoogleLogin = async () => {
     try {
       await googleSignIn();
-      navigate('/home');
+      navigate('/home'); // Redirect to home page after successful login
     } catch (err) {
       console.error("Google login error: ", err.message);
       setError("Something went wrong with Google login.");
     }
   };
 
+  // Email login or sign-up handler
   const handleEmailLogin = async () => {
     if (isSignUp) {
       try {
-        await emailSignUp(email, password);
-        navigate('/home');
+        await emailSignUp(email, password); // Create a new account with email and password
+        navigate('/home'); // Redirect to home page after successful sign-up
       } catch (err) {
         console.error("Email sign-up error: ", err.message);
         setError("Error signing up. Please try again.");
       }
     } else {
       try {
-        await emailSignIn(email, password);
-        navigate('/home');
+        await emailSignIn(email, password); // Sign in with existing account
+        navigate('/home'); // Redirect to home page after successful sign-in
       } catch (err) {
         console.error("Email sign-in error: ", err.message);
         setError("Error logging in. Please check your credentials.");
@@ -42,7 +44,7 @@ function Login() {
   return (
     <div 
       className="flex justify-center items-center min-h-screen bg-cover bg-center" 
-      style={{ backgroundImage: "url('/background.png')" }} // Notice: no 'public/' here
+      style={{ backgroundImage: "url('/background.png')" }} // Ensure image is accessible in public folder
     >
       <div className="p-8 bg-white bg-opacity-80 shadow-lg rounded-lg max-w-md w-full">
         <h2 className="text-2xl font-bold mb-4 text-center">{isSignUp ? 'Sign Up' : 'Sign In'}</h2>
@@ -92,7 +94,7 @@ function Login() {
         <div className="mt-4 text-center">
           <button 
             className="text-sm text-blue-500 hover:underline" 
-            onClick={() => setIsSignUp(!isSignUp)}
+            onClick={() => setIsSignUp(!isSignUp)} // Toggle between Sign Up and Sign In
           >
             {isSignUp ? 'Already have an account? Sign In' : 'Don’t have an account? Sign Up'}
           </button>
