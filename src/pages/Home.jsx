@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
-import { auth } from '../firebase'; // Import the Firebase auth instance
+import { auth, db } from '../firebase'; // Import Firebase auth and database instance
+import { getDatabase, ref, set, push } from 'firebase/database'; // Firebase Realtime Database methods
 import axios from 'axios'; // For fetching the university data
 
 function Home() {
@@ -16,6 +17,25 @@ function Home() {
       navigate('/login'); // Redirect to the login page after logging out
     } catch (error) {
       console.error("Error signing out: ", error.message);
+    }
+  };
+
+  // Handle saving university to the user's basket
+  const handleSaveUniversity = (university) => {
+    if (auth.currentUser) {
+      const db = getDatabase();
+      const userBasketRef = ref(db, `userBaskets/${auth.currentUser.uid}`);
+
+      push(userBasketRef, university)
+        .then(() => {
+          alert(`University "${university.name}" added to your basket.`);
+        })
+        .catch((error) => {
+          console.error("Error saving university: ", error.message);
+          alert('Failed to save university to your basket.');
+        });
+    } else {
+      alert('Please log in to save universities.');
     }
   };
 
@@ -57,6 +77,12 @@ function Home() {
               <p><strong>Country:</strong> {university.country}</p>
               <p><strong>Website:</strong> <a href={university.web_pages[0]} target="_blank" rel="noopener noreferrer" className="text-blue-500">{university.web_pages[0]}</a></p>
               <p><strong>Domains:</strong> {university.domains.join(', ')}</p>
+              <button
+                onClick={() => handleSaveUniversity(university)}
+                className="mt-4 w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600"
+              >
+                Save to Basket
+              </button>
             </div>
           ))
         ) : (

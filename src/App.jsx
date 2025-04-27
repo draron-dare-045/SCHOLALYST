@@ -6,7 +6,8 @@ import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import AcademicFiles from './pages/AcademicFiles';
-import NavBar from './components/NavBar'; // Make sure this path is correct
+import NavBar from './components/NavBar'; 
+import UniversityBasket from './pages/UniversityBasket';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -28,7 +29,7 @@ function App() {
         <Route path="/login" element={user ? <Home /> : <Login />} />
         <Route path="/home" element={user ? <Home /> : <Login />} />
         <Route path="/academic-files" element={user ? <AcademicFiles /> : <Login />} />
-       
+        <Route path="/UniversityBasket" element={<UniversityBasket />} /> 
       </Routes>
     </Router>
   );
