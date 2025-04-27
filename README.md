@@ -70,3 +70,6 @@ Scholalyst is a web application built using React, Firebase, and Vite. The appli
 
 - Ensure that your Firebase project has the correct authentication methods enabled.
 - Check your domain settings in Firebase Authentication for OAuth issues.
+
+### LICENCING
+ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
