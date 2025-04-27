@@ -1,12 +1,72 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Scholalyst Project
 
-Currently, two official plugins are available:
+## Overview
+Scholalyst is a web application built using React, Firebase, and Vite. The application provides various features like:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **User Authentication** using Google and Email/Password
+- **Study Plan** to manage study tasks and deadlines
+- **University Basket** for saving and managing universities of interest
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Google Authentication**: Sign in with your Google account.
+- **Email Authentication**: Sign up and log in with your email and password.
+- **Study Plan**: Add tasks, set deadlines, and get notifications before deadlines.
+- **University Basket**: Save universities for easy access and management.
+
+## Tech Stack
+
+- **Frontend**: React, Vite, Tailwind CSS
+- **Backend**: Firebase (Authentication, Realtime Database, Firestore),MockAPI
+- **Hosting**: Render for backend  and Vercel for frontend
+
+## Setup Instructions
+
+### Prerequisites
+
+- **Node.js**: Install the latest stable version of Node.js.
+- **Firebase Account**: Set up a Firebase project and enable Firebase Authentication and Database.
+- **Vercel/Render Account**: For hosting the app.
+
+### Local Development
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Set up Firebase:
+   - Create a Firebase project and set up Firebase Authentication (Google Sign-In and Email/Password).
+   - Set up Firebase Realtime Database.
+
+4. Add Firebase configuration to your `.env` file:
+   ```bash
+   VITE_FIREBASE_API_KEY=<your-api-key>
+   VITE_FIREBASE_AUTH_DOMAIN=<your-auth-domain>
+   VITE_FIREBASE_PROJECT_ID=<your-project-id>
+   VITE_FIREBASE_STORAGE_BUCKET=<your-storage-bucket>
+   VITE_FIREBASE_MESSAGING_SENDER_ID=<your-messaging-sender-id>
+   VITE_FIREBASE_APP_ID=<your-app-id>
+   VITE_FIREBASE_MEASUREMENT_ID=<your-measurement-id>
+   ```
+
+5. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+### Deployment
+
+1. Deploy on Vercel or Render.
+2. Connect your repository to Vercel/Render and deploy the application.
+
+### Troubleshooting
+
+- Ensure that your Firebase project has the correct authentication methods enabled.
+- Check your domain settings in Firebase Authentication for OAuth issues.
