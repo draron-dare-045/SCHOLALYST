@@ -17,7 +17,7 @@ function UniversityBasketPage() {
       onValue(userBasketRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
-          const universities = Object.keys(data).map(key => ({
+          const universities = Object.keys(data).map((key) => ({
             id: key,
             ...data[key],
           }));
@@ -37,8 +37,9 @@ function UniversityBasketPage() {
       const universityRef = ref(db, `userBaskets/${auth.currentUser.uid}/${universityId}`);
       remove(universityRef)
         .then(() => {
-          // Remove the university from the local state after deletion
-          setSavedUniversities(prevUniversities => prevUniversities.filter(university => university.id !== universityId));
+          setSavedUniversities((prevUniversities) =>
+            prevUniversities.filter((university) => university.id !== universityId)
+          );
         })
         .catch((error) => {
           console.error('Error deleting university:', error);
@@ -47,21 +48,29 @@ function UniversityBasketPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8"
-      style={{ backgroundImage: `url('/images.jpeg')` }}>
-      <h1 className="text-3xl font-bold text-center mb-6">UNIVERSITY BASKET</h1>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-8 flex flex-col items-center">
+      <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-pink-500 mb-8 tracking-wide animate-pulse">
+        UNIVERSITY BASKET
+      </h1>
 
       {/* Display Error Message if there's an error */}
       {error && <ErrorMessage message={error} />}
 
       {/* Display Saved Universities */}
-      <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full max-w-7xl">
         {savedUniversities.length > 0 ? (
           savedUniversities.map((university) => (
-            <UniversityCard key={university.id} university={university} onDelete={deleteUniversity} />
+            <div
+              key={university.id}
+              className="transform transition-all duration-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(34,211,238,0.5)]"
+            >
+              <UniversityCard university={university} onDelete={deleteUniversity} />
+            </div>
           ))
         ) : (
-          <p className="text-center">Your basket is empty.</p>
+          <p className="text-center text-lg text-cyan-300 col-span-full animate-fade-in">
+            Your basket is empty.
+          </p>
         )}
       </div>
     </div>

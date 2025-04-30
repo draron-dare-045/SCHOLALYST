@@ -1,4 +1,3 @@
-// pages/StudyPlanPage.jsx
 import React, { useState, useEffect } from 'react';
 import { getDatabase, ref, push, onValue, remove } from 'firebase/database';
 import { auth } from '../firebase';
@@ -92,14 +91,30 @@ function StudyPlanPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-100 to-indigo-300 p-8" style={{ backgroundImage: `url('/Todo.png')` }}>
-      <h1 className="text-4xl font-bold text-center mb-8 text-indigo-800">STUDY PLANS</h1>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-8 flex flex-col items-center">
+      <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-pink-500 mb-8 tracking-wide animate-pulse">
+        STUDY PLANS
+      </h1>
 
       {/* Input Section */}
-      <TaskInput title={title} setTitle={setTitle} deadline={deadline} setDeadline={setDeadline} handleAddTask={handleAddTask} />
+      <div className="w-full max-w-3xl mb-8">
+        <TaskInput
+          title={title}
+          setTitle={setTitle}
+          deadline={deadline}
+          setDeadline={setDeadline}
+          handleAddTask={handleAddTask}
+        />
+      </div>
 
       {/* Tasks List */}
-      <TaskList tasks={tasks} handleDeleteTask={handleDeleteTask} isDeadlineClose={isDeadlineClose} />
+      <div className="w-full max-w-3xl">
+        <TaskList
+          tasks={tasks}
+          handleDeleteTask={handleDeleteTask}
+          isDeadlineClose={isDeadlineClose}
+        />
+      </div>
     </div>
   );
 }
